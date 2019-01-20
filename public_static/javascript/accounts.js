@@ -193,7 +193,9 @@ App = {
           console.log("Id", id);
           return AssetInstance.balanceOf(id);
       }).then((balance)=>{
-        console.log(balance);
+        console.log(balance.c[0]);
+        var li = `<li> The balance for the ID ${id} is ${balance.c[0]}</li>`;
+        $("#log-data").append(li);
       }).catch(function (err) {
           console.log(err.message);
       });
@@ -239,7 +241,9 @@ App = {
               AssetInstance = instance;
               console.log(name ,amount ,metaData ,parseInt(id) + 1);
               AssetInstance.mint(name, amount, metaData, 0, symbol, parseInt(id)+1).then((id2)=>{
-                console.log("hello",id2);;
+                
+                var li = `<li> The transaction is ${id2.tx}</li>`;
+                $("#log-data").append(li);
           })
           })
           })
