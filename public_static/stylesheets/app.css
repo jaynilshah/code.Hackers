@@ -764,6 +764,13 @@ body {
     padding-top: 20px;
     display: inline-block; }
 
+    #log-data{
+      font-size: 22px;
+    }
+    #large{
+      font-size: 24px;
+    }
+
     /* .checkBalance{
       position: relative;
       

@@ -4,6 +4,7 @@ App = {
   web3Provider: null,
   contracts: {},
 
+
   init: function () {
       return App.initWeb3();
   },
@@ -46,6 +47,9 @@ App = {
       $('#transferFrom').click({},App.tFrom);
       $('#balCheck').click({},App.balCheck);
       $('#view-button').click({},App.view);
+
+
+
       // $("#mintButton2").click({
       //     param1: "tibia-giant-sword",
       //     param2: 2,
@@ -157,7 +161,11 @@ App = {
     event.preventDefault();
     var to = $("#to").val();
     var id = $("#id").val();
-    var value = $("#amount").val();;
+    var value = $("#amount1").val();
+    
+    console.log(value)
+    value = parseInt(value);
+    console.log(value);
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -171,6 +179,7 @@ App = {
         console.log(data.tx);
         var li = `<li> The transaction is ${data.tx}</li>`;
         $("#log-data").append(li);
+        alert("Logs updated.");
       })
       .catch(function (err) {
           console.log(err.message);
@@ -183,6 +192,7 @@ App = {
     console.log('hi');
     event.preventDefault();
     var id = $("#balId").val();
+    var balance,name;
   
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -192,13 +202,29 @@ App = {
           AssetInstance = instance;
           console.log("Id", id);
           return AssetInstance.balanceOf(id);
-      }).then((balance)=>{
-        console.log(balance.c[0]);
-        var li = `<li> The balance for the ID ${id} is ${balance.c[0]}</li>`;
-        $("#log-data").append(li);
+      }).then((data)=>{
+        console.log(data.c[0]);
+        balance = data.c[0];
+        
       }).catch(function (err) {
           console.log(err.message);
       });
+
+      App.contracts.Asset.deployed().then(function (instance) {
+        AssetInstance = instance;
+        console.log("Id", id);
+        return AssetInstance.name(id);
+    }).then((data)=>{
+      console.log(data);
+      name = data;
+      
+      var li = `<li> For ID: ${id}, Name: ${name}, the balance is ${balance}</li>`;
+        $("#log-data").append(li);
+        alert("Logs updated.");
+    }).catch(function (err) {
+        console.log(err.message);
+    });
+
   });
   },
   py: function(event){
@@ -214,6 +240,7 @@ App = {
     posting.done(function(response){
       var li = `<li>The expected price is ${response}</li>`;
       $("#log-data").append(li);
+      alert("Logs updated.");
       // console.log(`The expected price is ${id}`);
     })
   },
@@ -242,8 +269,9 @@ App = {
               console.log(name ,amount ,metaData ,parseInt(id) + 1);
               AssetInstance.mint(name, amount, metaData, 0, symbol, parseInt(id)+1).then((id2)=>{
                 
-                var li = `<li> The transaction is ${id2.tx}</li>`;
+                var li = `<li> The transaction of the ID ${parseInt(id)+1} is ${id2.tx}</li>`;
                 $("#log-data").append(li);
+                alert("Logs updated.");
           })
           })
           })
@@ -252,6 +280,51 @@ App = {
           });
       });
   },
+  start: function(){
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+          console.log(error);
+      }
+      App.contracts.Asset.deployed().then(function (instance){
+        AssetInstance = instance;
+        return AssetInstance.returnAssetCount();
+      })
+      .then(function (id) {
+        App.contracts.Asset.deployed().then(function (instance) {
+          AssetInstance = instance;
+          // console.log(name ,amount ,metaData ,parseInt(id) + 1);
+          AssetInstance.mint('Mumbai', 1000, "IITB", 0, "MUM", 1).then((id2)=>{
+            
+      })
+      })
+      })
+      .catch(function (err) {
+          console.log(err.message);
+      });
+  });
+  web3.eth.getAccounts(function (error, accounts) {
+    if (error) {
+        console.log(error);
+    }
+    App.contracts.Asset.deployed().then(function (instance){
+      AssetInstance = instance;
+      return AssetInstance.returnAssetCount();
+    })
+    .then(function (id) {
+      App.contracts.Asset.deployed().then(function (instance) {
+        AssetInstance = instance;
+        // console.log(name ,amount ,metaData ,parseInt(id) + 1);
+        AssetInstance.mint('BunkingHam Palace', 50000, "Omnipresent", 0, "BP", 2).then((id2)=>{
+          
+    })
+    })
+    })
+    .catch(function (err) {
+        console.log(err.message);
+    });
+});
+  }
 
   // getBalance: function (event) {
   //     event.preventDefault();
@@ -322,6 +395,8 @@ App = {
 
 $(function () {
   $(window).on("load", function () {
+
+      App.start();
       App.init();
   });
 });
