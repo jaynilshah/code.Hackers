@@ -5,6 +5,8 @@ import "./ERC1155.sol";
 contract Asset is ERC1155 {
     mapping (uint256 => address) public minters;
 
+    uint public assetCount;
+
     modifier minterOnly(uint256 _id) {
         require(minters[_id] == msg.sender);
         _;
@@ -21,7 +23,8 @@ contract Asset is ERC1155 {
         metadataURIs[_id] = _uri;
         _decimals[_id] = __decimals;
         symbols[_id] = _symbol;
-
+        
+        assetCount ++;
         // Grant the items to the minter
         items[_id].balances[msg.sender] = _totalSupply;
     }
@@ -29,4 +32,8 @@ contract Asset is ERC1155 {
     function setURI(uint256 _id, string calldata _uri) external minterOnly(_id) {
         metadataURIs[_id] = _uri;
     }
-}
+
+    function returnAssetCount () external view returns(uint) {
+        return assetCount;
+    }
+} 

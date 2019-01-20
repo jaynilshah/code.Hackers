@@ -62,6 +62,7 @@ contract ERC1155 is IERC1155, IERC1155Extended, IERC1155BatchTransfer, IERC1155B
         return allowances[_id][_owner][_spender];
     }
 
+
 /////////////////////////////////////// IERC1155Extended //////////////////////////////////////////
 
     function transfer(address _to, uint256 _id, uint256 _value) external {
@@ -183,6 +184,10 @@ contract ERC1155 is IERC1155, IERC1155Extended, IERC1155BatchTransfer, IERC1155B
 
     function uri(uint256 _id) external view returns (string memory) {
         return metadataURIs[_id];
+    }
+
+    function token(uint256 _id) external view returns (string memory, string memory, uint256, string memory) {
+        return (items[_id].name, symbols[_id], items[_id].totalSupply, metadataURIs[_id]);
     }
 
 ////////////////////////////////////////// OPTIONALS //////////////////////////////////////////////

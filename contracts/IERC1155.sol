@@ -25,7 +25,7 @@ interface IERC1155 {
     function transferFrom(address _from, address _to, uint256 _id, uint256 _value) external;
     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data) external;
     function approve(address _spender, uint256 _id, uint256 _currentValue, uint256 _value) external;
-    function balanceOf(uint256 _id, address _owner) external view returns (uint256);
+    function balanceOf(uint256 _id) external view returns (uint256);
     function allowance(uint256 _id, address _owner, address _spender) external view returns (uint256);
 }
 

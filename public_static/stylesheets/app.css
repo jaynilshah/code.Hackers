@@ -25,10 +25,11 @@
   100% {
     opacity: 1;
     transform: translateY(0); } }
-
+    
 * {
   margin: 0px;
   padding: 0px;
+  transition: none !important;
   box-sizing: border-box; }
 
 body {
@@ -113,10 +114,11 @@ body {
 .section-features {
   padding: 200px 0;
   background-image: linear-gradient(to right bottom, rgba(126, 213, 111, 0.8), rgba(40, 180, 133, 0.8)), url(../img/nat-4.jpg);
-  transform: skewY(-7deg);
-  margin-top: -120px; }
-  .section-features > * {
-    transform: skewY(7deg); }
+  /* transform: skewY(-7deg); */
+  margin-top: -150px;
+  margin-bottom: 150px; }
+  /* .section-features > * {
+    transform: skewY(7deg); } */
 
 .section-tours {
   background-color: #f7f7f7;
@@ -158,7 +160,7 @@ body {
   text-transform: uppercase;
   text-decoration: none;
   padding: 15px 40px;
-  display: inline-block;
+  display: block;
   border-radius: 50px;
   transition: all 0.2s;
   position: relative;
@@ -191,7 +193,8 @@ body {
 
 .btn--animated {
   animation: moveInUp 0.7s ease-out 0.25s;
-  animation-fill-mode: backwards; }
+  animation-fill-mode: backwards;
+ }
 
 .btn::after {
   content: "";
@@ -218,11 +221,13 @@ body {
   background-color: #55c57a;
   color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px); }
+  transform: translateY(-2px); 
+}
 
 .btn-text:active {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-  transform: translateY(2px); }
+  transform: translateY(2px);
+ }
 
 .composition {
   position: relative; }
@@ -271,6 +276,7 @@ body {
     color: transparent; }
   .feature-box:hover {
     transform: translateY(-15px) scale(1.03); }
+  
 
 .card {
   perspective: 1500px;
@@ -757,3 +763,13 @@ body {
     border-top: 1px solid #777;
     padding-top: 20px;
     display: inline-block; }
+
+    /* .checkBalance{
+      position: relative;
+      
+      display: block;
+      background-color:  #f7f7f7;
+      
+     
+      height: 600px;
+    } */

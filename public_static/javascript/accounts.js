@@ -1,5 +1,6 @@
 
 App = {
+  id:0,
   web3Provider: null,
   contracts: {},
 
@@ -42,8 +43,9 @@ App = {
       //Mint
       $("#mint-button").click({}, App.mint);
       $('#py-button').click(App.py);
-      $('#transferFrom').click(App.tFrom);
-      $('#balCheck').click(App.balCheck);
+      $('#transferFrom').click({},App.tFrom);
+      $('#balCheck').click({},App.balCheck);
+      $('#view-button').click({},App.view);
       // $("#mintButton2").click({
       //     param1: "tibia-giant-sword",
       //     param2: 2,
@@ -125,11 +127,37 @@ App = {
       // }, App.getBalanceAccount);
 
   },
-  tFrom: function(event){
+  view: function (event){
     event.preventDefault();
-    var to = to;
-    var id = id;
-    var value = value;
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+          console.log(error);
+      }
+      App.contracts.Asset.deployed().then(function (instance) {
+          AssetInstance = instance;
+          return AssetInstance.returnAssetCount();
+      }).then((totalCount)=>{
+        App.contracts.Asset.deployed().then(function(instance){
+          AssetInstance = instance;
+          
+          console.log(totalCount);
+          
+          AssetInstance.token(parseInt(1)).then((data)=>{
+            console.log(data);
+          });
+        });
+      })
+      .catch(function (err) {
+          console.log(err.message);
+      });
+  })
+  },
+  tFrom: function(event){
+    console.log('transfer');
+    event.preventDefault();
+    var to = $("#to").val();
+    var id = $("#id").val();
+    var value = $("#amount").val();;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -137,30 +165,35 @@ App = {
       }
       App.contracts.Asset.deployed().then(function (instance) {
           AssetInstance = instance;
-          return AssetInstance.safeTransfer( to, id, value, metaData);
-      }).catch(function (err) {
+          return AssetInstance.transfer( to, id, value);
+      })
+      .then((data)=>{
+        console.log(data.tx);
+        var li = `<li> The transaction is ${data.tx}</li>`;
+        $("#log-data").append(li);
+      })
+      .catch(function (err) {
           console.log(err.message);
       });
   })
 },
-  name: function(event){
-    event.preventDefault();
-    
-  },
-
+  
   balCheck: function(event){
-    event.preventDefault();
-    alert('hi');
 
+    console.log('hi');
+    event.preventDefault();
+    var id = $("#balId").val();
+  
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
           console.log(error);
       }
       App.contracts.Asset.deployed().then(function (instance) {
           AssetInstance = instance;
+          console.log("Id", id);
           return AssetInstance.balanceOf(id);
       }).then((balance)=>{
-        console.log(balance)
+        console.log(balance);
       }).catch(function (err) {
           console.log(err.message);
       });
@@ -177,8 +210,8 @@ App = {
     var age = $("#age").val();
     var posting = $.post(url,{area,street,stories,bedRoom,age});
     posting.done(function(response){
-      var li = `The expected price is ${response}`;
-      $("#results").empty().append(li);
+      var li = `<li>The expected price is ${response}</li>`;
+      $("#log-data").append(li);
       // console.log(`The expected price is ${id}`);
     })
   },
@@ -191,16 +224,26 @@ App = {
     var amount = $("#amount").val();
     var metaData = $("#metaData").val();
     var symbol = $("#symbol").val();
-    var id = $("#id").val();
-    console.log(name ,amount ,metaData ,symbol ,id);
+    
+    
       web3.eth.getAccounts(function (error, accounts) {
           if (error) {
               console.log(error);
           }
-          App.contracts.Asset.deployed().then(function (instance) {
+          App.contracts.Asset.deployed().then(function (instance){
+            AssetInstance = instance;
+            return AssetInstance.returnAssetCount();
+          })
+          .then(function (id) {
+            App.contracts.Asset.deployed().then(function (instance) {
               AssetInstance = instance;
-              return AssetInstance.mint(name, amount, metaData, 0, symbol, id);
-          }).catch(function (err) {
+              console.log(name ,amount ,metaData ,parseInt(id) + 1);
+              AssetInstance.mint(name, amount, metaData, 0, symbol, parseInt(id)+1).then((id2)=>{
+                console.log("hello",id2);;
+          })
+          })
+          })
+          .catch(function (err) {
               console.log(err.message);
           });
       });
